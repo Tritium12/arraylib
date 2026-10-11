@@ -1,0 +1,11 @@
+build/ 
+out/ 
+*.o 
+*.a 
+*.so 
+*.dll 
+*.lib 
+*.exe 
+.vscode/ 
+.idea/ 
+compile_commands.json

@@ -7,9 +7,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(arraylib SHARED src/arraylib.cpp) 
 #SHARED в add_library — сборка .so / .dll. 
 #target_include_directories(... PUBLIC ...) — объекты, #которые линкуется с arraylib, получают путь к include/ 
-target_include_directories(arraylib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ) 
-#target_compile_definitions(... PRIVATE ARRAYLIB_BUILD) #— макрос ARRAYLIB_BUILD определён только при
- #сборке библиотеки, чтобы функции экспортировались 
+target_include_directories(arraylib 
+PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ) 
+#target_compile_definitions(... PRIVATE ARRAYLIB_BUILD) #— макрос ARRAYLIB_BUILD определён только при #сборке библиотеки, чтобы функции экспортировались 
 target_compile_definitions(arraylib PRIVATE ARRAYLIB_BUILD) 
 if (MSVC) 
 target_compile_options(arraylib PRIVATE /W4) 
@@ -28,7 +28,7 @@ set_target_properties(app PROPERTIES BUILD_RPATH "$ORIGIN")
 set_target_properties(arraylib app PROPERTIES 
 RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" 
 LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"  
-ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}") 
+ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 # ---- Тесты ---- 
 #include(CTest) — учитывает опцию BUILD_TESTING; #тесты можно отключить через DBUILD_TESTING=OFF 
 include(CTest) 
@@ -45,20 +45,21 @@ target_compile_options(test_integration PRIVATE -UNDEBUG)
 add_test(NAME integration COMMAND test_integration) 
 endif() 
 # ---- Пример по варианту ---- 
-add_executable(variant_13 examples/variant_13.cpp) 
-target_link_libraries(variant_13 PRIVATE arraylib)
+add_executable(variant_13 examples/variant_01.cpp) 
+target_link_libraries(variant_13 PRIVATE arraylib) 
+
 
 
 
 include(CTest) 
 if (BUILD_TESTING) 
-# add_executable(test_unit tests/test_unit.cpp) 
+add_executable(test_unit tests/test_unit.cpp) 
 target_link_libraries(test_unit PRIVATE arraylib) 
 # Отключаем NDEBUG, чтобы assert работал и в Release 
 target_compile_options(test_unit PRIVATE -UNDEBUG) 
-# add_test(NAME unit COMMAND test_unit) 
-# add_executable(test_integration tests/test_integration.cpp) 
+add_test(NAME unit COMMAND test_unit) 
+add_executable(test_integration tests/test_integration.cpp) 
 target_link_libraries(test_integration PRIVATE arraylib) 
 target_compile_options(test_integration PRIVATE -UNDEBUG) 
-# add_test(NAME integration COMMAND test_integration) 
-endif()
+add_test(NAME integration COMMAND test_integration) 
+endif() 

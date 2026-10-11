@@ -23,7 +23,7 @@ for (std::size_t i = 1; i < n; ++i) if (a[i] < m) m = a[i];
 return m; 
 } 
 
-int arr_average(const int* arr, std::size_t n) { 
+double arr_average(const int* arr, std::size_t n) { 
     double s = 0; 
     for (std::size_t i = 0; i < n; ++i) { 
         s += arr[i]; 
